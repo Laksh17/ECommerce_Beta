@@ -1,8 +1,13 @@
 import React from 'react'
 import { client } from '../lib/client'
 import { Product, FooterBanner, HeroBanner } from '../components'
+import { useWeb3 } from '../context/StateContext'
+// import { useWeb3 } from '../components/providers/web3'
 
 const Home = ({ products, bannerData }) => {
+  const _web3api  = useWeb3()
+  const { web3, provider, connect }  = useWeb3()
+  console.log(connect)
   return (
     <div>
       <HeroBanner heroBanner={bannerData.length && bannerData[0]} />
@@ -12,7 +17,9 @@ const Home = ({ products, bannerData }) => {
         </h2>
         <p>Speakers that please one and all!</p>
       </div>
-
+     {
+      provider && <button onClick={connect}>connect </button>
+     }
       <div className='products-container'>
         {products?.map((product) => <Product key={product._id} product={product} />)}
       </div>

@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 
 import toast from "react-hot-toast";
-
+import detectEthereumProvider from "@metamask/detect-provider";
+import Web3 from "web3";
 const Context = createContext()
+const Web3Context = createContext();
 
 export const StateContext = ({ children }) => {
     const [showCart, setShowCart] = useState(false)
@@ -10,6 +12,47 @@ export const StateContext = ({ children }) => {
     const [totalPrice, setTotalPrice] = useState(0)
     const [totalQuantities, setTotalQuantities] = useState(0)
     const [qty, setQty] = useState(1)
+    const [web3api, setWeb3api] = useState({
+        web3:null,
+        provider:null,
+        contract:null,
+        isLoaded:true
+    })
+
+    useEffect(() => {
+        const loadProvider = async () => {
+        const provider = await detectEthereumProvider();
+        if(provider) {
+        const web3 = new Web3(provider);
+        setWeb3api({
+         web3,
+         provider,
+         contract:null,
+         isLoading:false
+        })
+        } else {
+         setWeb3api(api => ({...api, isLoading:false}))
+         console.error("Please, install Metamask.")
+        }
+        }
+        loadProvider()
+       },[])
+
+    const _web3Api = useMemo(() => {
+        const { web3, provider } = web3api;
+       return {
+       ...web3api,
+       isWeb3Loaded  : web3 != null,
+       connect : provider ? 
+       async () =>  {try {
+        await provider.request({method: "eth_requestAccounts"});
+       } catch (error) {
+        location.reload()
+       }}:
+       () => {console.error("Couldn't Connect to Metamask!")}
+       }
+      },[web3api])
+
 
     let foundProduct
     let index //Needed for the cart
@@ -75,6 +118,7 @@ export const StateContext = ({ children }) => {
         })
     }
     return (
+        <Web3Context.Provider value={_web3Api}>
         <Context.Provider
             value={{
                 showCart,
@@ -94,7 +138,12 @@ export const StateContext = ({ children }) => {
             }}>
             {children}
         </Context.Provider>//Not rendering anything but just wrappin it
+        </Web3Context.Provider>
     )
 }
 
-export const useStateContext = () => useContext(Context)
+export const useStateContext = () => useContext(Context) 
+
+export function useWeb3() {
+  return useContext(Web3Context);
+}
