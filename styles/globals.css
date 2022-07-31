@@ -670,7 +670,7 @@ button:hover {
 
 .success-wrapper,
 .cancel-wrapper {
-  background-color: white;
+  background-color: rgb(31, 29, 29);
   min-height: 60vh;
 
 }
@@ -699,12 +699,13 @@ button:hover {
   margin-top: 15px 0px;
   font-weight: 900;
   font-size: 40px;
-  color: #ffffff;
+  color: #f77604;
 }
 
 .success .email-msg {
   font-size: 16px;
   font-weight: 600;
+  color: #232323;
   text-align: center;
 }
 
@@ -713,12 +714,42 @@ button:hover {
   font-weight: 600;
 }
 
+.check-warranty a,
+.claim-warranty a {
+  color: #000000;
+}
+
+.login-form {
+  max-width: 40vw;
+  display: flex;
+  flex-direction: column;
+  margin: auto 30%;
+  font-size: 22px;
+  /* text-align: center; */
+}
+
+.login-form label {
+  padding: 5px;
+  margin: 10px;
+}
+
+.login-form input {
+  margin: 10px;
+  background-color: #f77604;
+}
+
+.login-form .submit {
+  max-width: 100px;
+  font-weight: 700;
+}
+
 .success .description {
   font-size: 16px;
   font-weight: 600;
   text-align: center;
   margin: 10px;
   margin-top: 30px;
+  color: #232323;
 }
 
 .success .description .email {

@@ -1,11 +1,13 @@
 import Stripe from 'stripe'
+import { useStateContext } from '../../context/StateContext'
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
 
-        console.log(req.body)
+        // console.log("Request body looks like :", req.body)
+
 
         try {
             const params = {
@@ -24,7 +26,7 @@ export default async function handler(req, res) {
                 line_items: req.body.map((item) => {
                     const img = item.image[0].asset._ref
                     const newImage = img.replace('image-', 'https://cdn.sanity.io/images/0mf7febm/production/').replace('-webp', '.webp')
-                    console.log('IMAGE', newImage)
+                    // console.log('IMAGE', newImage)
 
                     return {
                         price_data: {
@@ -46,8 +48,11 @@ export default async function handler(req, res) {
                 cancel_url: `${req.headers.origin}/canceled`,
             }
             // Create Checkout Sessions from body params.
-            const session = await stripe.checkout.sessions.create(params);
+            const session = await stripe.checkout.sessions.create
+                (params);
+            // console.log(session);
             res.status(200).json(session)
+            // console.log(req.body)
         } catch (err) {
             res.status(err.statusCode || 500).json(err.message);
         }

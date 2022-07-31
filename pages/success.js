@@ -5,15 +5,17 @@ import { runFireWorks } from '../lib/utils'
 import { useStateContext } from '../context/StateContext'
 
 const Success = () => {
-    const { setCartItems, setTotalPrice, setTotalQuantities } = useStateContext()
+    const { cartItems, setCartItems, setTotalPrice, setTotalQuantities } = useStateContext()
 
-    useEffect(() => {
-        localStorage.clear()
-        setCartItems([])
-        setTotalPrice(0)
-        setTotalQuantities(0)
-        runFireWorks()
-    }, [])//dependency array is empty -> executes as soon as the page loads
+    console.log(cartItems)
+
+    // useEffect(() => {
+    //     localStorage.clear()
+    //     setCartItems([])
+    //     setTotalPrice(0)
+    //     setTotalQuantities(0)
+    //     runFireWorks()
+    // }, [])//dependency array is empty -> executes as soon as the page loads
 
     return (
         <div className='success-wrapper'>
